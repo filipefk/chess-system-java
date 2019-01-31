@@ -26,10 +26,8 @@ public class ChessMatch {
 	}
 	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
-		Position source = sourcePosition.toPosition();
-		Position target = targetPosition.toPosition();
-		validateSourcePosition(source);
-		Piece capturedPiece = makeMove(source, target);
+		validateSourcePosition(sourcePosition);
+		Piece capturedPiece = makeMove(sourcePosition.toPosition(), targetPosition.toPosition());
 		
 //		Piece piece = board.removePiece(sourcePosition.toPosition());
 //		board.placePiece(piece, targetPosition.toPosition());
@@ -43,9 +41,9 @@ public class ChessMatch {
 		return capturedPiece;
 	}
 
-	private void validateSourcePosition(Position source) {
-		if (!board.thereIsAPiece(source)) {
-			throw new ChessException("There is no peace on source position");
+	public void validateSourcePosition(ChessPosition source) {
+		if (!board.thereIsAPiece(source.toPosition())) {
+			throw new ChessException("There is no peace on position " + source.getColumn() + source.getRow());
 		}
 	}
 
