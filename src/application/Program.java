@@ -14,6 +14,7 @@ public class Program {
 		Scanner sc = new Scanner(System.in);
 		ChessMatch chessMatch = new ChessMatch();
 		
+
 		while (true) {
 			try {
 				UI.clearScreen();
@@ -42,7 +43,8 @@ public class Program {
 				System.out.println(e.getMessage());
 				sc.nextLine();
 			}
-			
 		}
+		
+		
 	}
 }
