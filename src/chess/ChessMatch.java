@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
@@ -11,7 +14,8 @@ public class ChessMatch {
 	private Board board;
 	private int turn;
 	private Color currentPlayer;
-	
+	private List<ChessPiece> piecesOnTheBoard = new ArrayList<>();
+	private List<ChessPiece> capturedPieces = new ArrayList<>();
 	
 	public ChessMatch() {
 		board = new Board(8, 8);
@@ -26,6 +30,10 @@ public class ChessMatch {
 
 	public Color getCurrentPlayer() {
 		return currentPlayer;
+	}
+	
+	public List<ChessPiece> getCapturedPieces() {
+		return capturedPieces;
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -43,19 +51,21 @@ public class ChessMatch {
 		return board.piece(sourcePosition.toPosition()).possibleMoves();
 	}
 	
-	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
+	public void performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		validateSourcePosition(sourcePosition);
 		validateTargetPosition(sourcePosition, targetPosition);
-		Piece capturedPiece = makeMove(sourcePosition.toPosition(), targetPosition.toPosition());
+		makeMove(sourcePosition.toPosition(), targetPosition.toPosition());
 		nextTurn();
-		return (ChessPiece)capturedPiece;
 	}
 
-	private Piece makeMove(Position source, Position target) {
+	private void makeMove(Position source, Position target) {
 		Piece piece = board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
 		board.placePiece(piece, target);
-		return capturedPiece;
+		if (capturedPiece != null) {
+			piecesOnTheBoard.remove(capturedPiece);
+			capturedPieces.add((ChessPiece)capturedPiece);
+		}
 	}
 
 	private void validateSourcePosition(ChessPosition source) {
@@ -83,6 +93,7 @@ public class ChessMatch {
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
+		piecesOnTheBoard.add(piece);
 	}
 	
 	private void InitialSetup() {
