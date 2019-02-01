@@ -9,12 +9,25 @@ import chess.pieces.Rook;
 public class ChessMatch {
 	
 	private Board board;
+	private int turn;
+	private Color currentPlayer;
+	
 	
 	public ChessMatch() {
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		InitialSetup();
 	}
 	
+	public int getTurn() {
+		return turn;
+	}
+
+	public Color getCurrentPlayer() {
+		return currentPlayer;
+	}
+
 	public ChessPiece[][] getPieces() {
 		ChessPiece[][] chessPieces = new ChessPiece[board.getRows()][board.getColumns()];
 		for (int r = 0; r < board.getRows(); r++) {
@@ -34,6 +47,7 @@ public class ChessMatch {
 		validateSourcePosition(sourcePosition);
 		validateTargetPosition(sourcePosition, targetPosition);
 		Piece capturedPiece = makeMove(sourcePosition.toPosition(), targetPosition.toPosition());
+		nextTurn();
 		return (ChessPiece)capturedPiece;
 	}
 
@@ -48,6 +62,9 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(source.toPosition())) {
 			throw new ChessException("There is no peace on position " + source.getColumn() + source.getRow());
 		}
+		if (currentPlayer != ((ChessPiece)board.piece(source.toPosition())).getColor()) {
+			throw new ChessException("The chosen piece is not yours");
+		}
 		if (!board.piece(source.toPosition()).isThereAnyPossibleMove()) {
 			throw new ChessException("There is no possible movies for the chosen piece");
 		}
@@ -57,6 +74,11 @@ public class ChessMatch {
 		if (!board.piece(sourcePosition.toPosition()).possibleMove(targetPosition.toPosition())) {
 			throw new ChessException("The chosen piece can't move to target position");
 		}
+	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
