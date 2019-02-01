@@ -25,16 +25,18 @@ public class ChessMatch {
 		return chessPieces;
 	}
 	
+	public boolean[][] possibleMoves(ChessPosition sourcePosition) {
+		validateSourcePosition(sourcePosition);
+		return board.piece(sourcePosition.toPosition()).possibleMoves();
+	}
+	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		validateSourcePosition(sourcePosition);
 		validateTargetPosition(sourcePosition, targetPosition);
 		Piece capturedPiece = makeMove(sourcePosition.toPosition(), targetPosition.toPosition());
-		
-//		Piece piece = board.removePiece(sourcePosition.toPosition());
-//		board.placePiece(piece, targetPosition.toPosition());
 		return (ChessPiece)capturedPiece;
 	}
-	
+
 	private Piece makeMove(Position source, Position target) {
 		Piece piece = board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
@@ -42,7 +44,7 @@ public class ChessMatch {
 		return capturedPiece;
 	}
 
-	public void validateSourcePosition(ChessPosition source) {
+	private void validateSourcePosition(ChessPosition source) {
 		if (!board.thereIsAPiece(source.toPosition())) {
 			throw new ChessException("There is no peace on position " + source.getColumn() + source.getRow());
 		}
@@ -75,6 +77,5 @@ public class ChessMatch {
         placeNewPiece('e', 7, new Rook(board, Color.BLACK));
         placeNewPiece('e', 8, new Rook(board, Color.BLACK));
         placeNewPiece('d', 8, new King(board, Color.BLACK));
-		
 	}
 }
