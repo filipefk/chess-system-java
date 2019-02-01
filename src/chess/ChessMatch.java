@@ -81,24 +81,26 @@ public class ChessMatch {
 	}
 
 	private Piece makeMove(Position source, Position target) {
-		Piece piece = board.removePiece(source);
+		ChessPiece piece = (ChessPiece)board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
 		board.placePiece(piece, target);
 		if (capturedPiece != null) {
 			piecesOnTheBoard.remove(capturedPiece);
 			capturedPieces.add((ChessPiece)capturedPiece);
 		}
+		piece.increaseMoveCount();
 		return capturedPiece;
 	}
 	
 	private void undoMove(Position source, Position target, Piece capturedPiece) {
-		Piece piece = board.removePiece(target);
+		ChessPiece piece = (ChessPiece)board.removePiece(target);
 		board.placePiece(piece, source);
 		if (capturedPiece != null) {
 			board.placePiece(capturedPiece, target);
 			capturedPieces.remove(capturedPiece);
 			piecesOnTheBoard.add((ChessPiece)capturedPiece);
 		}
+		piece.decreaseMoveCount();
 	}
 
 	private void validateSourcePosition(ChessPosition source) {
