@@ -15,7 +15,7 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		
 
-		while (true) {
+		while (!chessMatch.isCheckMate()) {
 			try {
 				UI.clearScreen();
 				UI.printMatch(chessMatch);
@@ -44,7 +44,8 @@ public class Program {
 				sc.nextLine();
 			}
 		}
-		
+		UI.clearScreen();
+		UI.printMatch(chessMatch);
 		
 	}
 }
