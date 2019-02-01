@@ -45,6 +45,9 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(source.toPosition())) {
 			throw new ChessException("There is no peace on position " + source.getColumn() + source.getRow());
 		}
+		if (!board.piece(source.toPosition()).isThereAnyPossibleMove()) {
+			throw new ChessException("There is no possible movies for the chosen piece");
+		}
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
